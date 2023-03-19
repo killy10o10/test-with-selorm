@@ -14,7 +14,7 @@ Clone & Run Locally
 Clone this repository to your local machine using the command:
 bash
 
-git clone https://github.com/username/node-express-sequelize-jwt-mysql-crud.git
+git clone https://github.com/Personal-Projects-Bruce-Selorm/node-express-sequelize-jwt-mysql-crud.git
 Navigate to the project directory:
 bash
 
