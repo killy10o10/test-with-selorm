@@ -35,7 +35,8 @@ const createToken = function (user_id) {
 };
 
 module.exports.signup_get = function (req, res) {
-  res.render("auth/sign-up");
+  const data = { title: "Todo App - Sign Up" };
+  res.render("auth/sign-up", {data});
 };
 
 module.exports.signup_post = async function (req, res) {
@@ -65,6 +66,7 @@ module.exports.signup_post = async function (req, res) {
       //create jwt oken
       const token = createToken(newUser.id);
       res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
+      res.cookie("jwt_exist", true, { maxAge: maxAge });
       res.status(201).json({ user: newUser.id });
     } catch (err) {
       error = errorHandler(err);
@@ -73,7 +75,8 @@ module.exports.signup_post = async function (req, res) {
   }
 };
 module.exports.signin_get = async function (req, res) {
-  res.render("auth/sign-in");
+  const data = { title: "Todo App - Sign In" };
+  res.render("auth/sign-in", {data});
 };
 
 module.exports.signin_post = async function (req, res) {
@@ -100,6 +103,7 @@ module.exports.signin_post = async function (req, res) {
         //assign a jwt token  to user
         var token = createToken(result.id);
         res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
+        res.cookie("jwt_exist", true, { maxAge: maxAge });
         var data = {
           user: result.id,
         };
@@ -119,11 +123,8 @@ module.exports.signin_post = async function (req, res) {
   }
 };
 
-module.exports.dashbord = function(req,res){
-  res.render('dashbord')
-}
-
 module.exports.logout = function (req, res) {
-    res.cookie('jwt','',{maxAge:0})
-    res.status(200).redirect('/')
+  res.cookie("jwt", "", { maxAge: 0 });
+  res.cookie("jwt_exist", true, { maxAge: 0 });
+  res.status(200).redirect("/");
 };

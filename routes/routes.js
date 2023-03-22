@@ -6,6 +6,7 @@
 const { Router } = require("express");
 const homeController = require("../controllers/HomeController");
 const userController = require("../controllers/UserController");
+const todoControler = require('../controllers/TodoController')
 const middleware = require('../middlewares/middleware')
 
 //initialize router
@@ -18,6 +19,6 @@ router.post("/sign-up", userController.signup_post);
 router.get('/sign-in', userController.signin_get)
 router.post('/sign-in', userController.signin_post)
 router.get('/logout',userController.logout)
-router.get('/dashbord', middleware.auth, userController.dashbord)
+router.get('/dashbord', middleware.auth, todoControler.dashbord)
 
 module.exports = router;

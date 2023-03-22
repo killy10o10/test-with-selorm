@@ -29,7 +29,7 @@ app.set("views", path.resolve(__dirname, 'views'))
 // test connection to db
 db.connect();
 //run migrations
-migration.runMigration();
+migration.runMigration(false);
 
 //set up middlewares
 app.use(express.json())

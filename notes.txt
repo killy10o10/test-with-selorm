@@ -1,0 +1,10 @@
+Task description: A short and concise description of the task or activity that needs to be completed.
+Due date or deadline: The date by which the task must be completed or a deadline for the task.
+Priority: A way to indicate the importance or urgency of the task. This can be shown by using labels such as "high," "medium," or "low," or by using color-coding.
+Status: A way to indicate whether a task is pending, in progress, or completed.
+Reminders: A feature that allows users to set reminders for their tasks, so they don't forget to complete them.
+Notes: A section where users can add any additional information or notes about the task.
+Tags: A way to categorize tasks and group them together. For example, users might create tags such as "work," "personal," "shopping," or "errands."
+Subtasks: A way to break down larger tasks into smaller, more manageable parts.
+Attachments: A feature that allows users to attach files or documents related to the task.
+Recurrence: A way to set up recurring tasks that need to be completed on a regular basis. For example, users might set up a task to pay rent every month.

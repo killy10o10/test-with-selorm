@@ -10,6 +10,11 @@ const { DataTypes } = require("sequelize");
 db.sequelize.define(
   "User",
   {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey:true
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -38,10 +43,12 @@ db.sequelize.define(
         },
       },
     },
+
   },
 
   {
     tableName: "Users",
+
     indexes: [
       {
         unique: true,
@@ -49,6 +56,7 @@ db.sequelize.define(
       },
     ],
   }
+
 );
 
 var User = db.sequelize.models.User;

@@ -8,13 +8,14 @@
 <%- include('./partials/footer') %>
 
 <script>
-  const loginButton = document.querySelector(".login");
-  const registerButton = document.querySelector(".register");
-  const logoutButton = document.querySelector(".logout");
-  const dashbord = document.querySelector(".dashbord");
-
-  loginButton.classList.add("hidden");
-  registerButton.classList.add("hidden");
-  logoutButton.classList.remove("hidden");
-  dashbord.classList.remove("hidden");
+  if (document.cookie.indexOf("jwt_exist") > -1) {
+    const classList = [".login", ".register", ".logout", ".dashbord"];
+    classList.forEach((val) => {
+      if (val === ".login" || val === ".register") {
+        document.querySelector(val).classList.add("hidden");
+      } else {
+        document.querySelector(val).classList.remove("hidden");
+      }
+    });
+  }
 </script>
