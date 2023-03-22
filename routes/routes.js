@@ -6,19 +6,29 @@
 const { Router } = require("express");
 const homeController = require("../controllers/HomeController");
 const userController = require("../controllers/UserController");
-const todoControler = require('../controllers/TodoController')
-const middleware = require('../middlewares/middleware')
+const todoControler = require("../controllers/TodoController");
+const middleware = require("../middlewares/middleware");
 
 //initialize router
 const router = Router();
 
-//http verb GET for home
+// Define the routes and associate them with the appropriate controllers
+
+// The home page route
 router.get("/", homeController.get);
+
+// The sign-up page routes
 router.get("/sign-up", userController.signup_get);
 router.post("/sign-up", userController.signup_post);
-router.get('/sign-in', userController.signin_get)
-router.post('/sign-in', userController.signin_post)
-router.get('/logout',userController.logout)
-router.get('/dashbord', middleware.auth, todoControler.dashbord)
+
+// The sign-in page routes
+router.get("/sign-in", userController.signin_get);
+router.post("/sign-in", userController.signin_post);
+
+// The logout route
+router.get("/logout", userController.logout);
+
+// The dashboard route, which requires authentication middleware
+router.get("/dashboard", middleware.auth, todoController.dashboard);
 
 module.exports = router;
