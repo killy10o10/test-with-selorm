@@ -1,0 +1,20 @@
+<%- include('./partials/header') %>
+<div class="container m-5">
+  <div class="jumbotron">
+    <h1>Dashbord</h1>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
+
+<script>
+  const loginButton = document.querySelector(".login");
+  const registerButton = document.querySelector(".register");
+  const logoutButton = document.querySelector(".logout");
+  const dashbord = document.querySelector(".dashbord");
+
+  loginButton.classList.add("hidden");
+  registerButton.classList.add("hidden");
+  logoutButton.classList.remove("hidden");
+  dashbord.classList.remove("hidden");
+</script>
