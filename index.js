@@ -20,6 +20,7 @@ const migration  = require('./Database/migration')
 
 const app = express();
 
+app.use(express.static('public'))
 
 //set up view engine
 app.set("view engine", 'ejs');

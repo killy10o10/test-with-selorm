@@ -20,7 +20,7 @@
           <label for="" class="error tosAgreement"></label>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+          <button class="btn btn-primary btn-sm" type="submit" onclick="signUp()">Submit</button>
         </div>
       </form>
     </div>
@@ -29,38 +29,4 @@
 
 <%- include('../partials/footer') %>
 
-<script>
-  var form = document.querySelector("form");
 
-  //error fields
-  var usernameError = document.querySelector(".error.username");
-  var passwordeError = document.querySelector(".error.password");
-  var tosAgreementError = document.querySelector(".error.tosAgreement");
-
-  //listen to submit event
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    //get input
-    var username = form.username.value;
-    var password = form.password.value;
-    var tosAgreement = form.tosAgreement.checked;
-
-    //submit form
-    var res = await fetch("/sign-up", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, tosAgreement }),
-    });
-    var data = await res.json();
-
-    if (data.errors) {
-      usernameError.textContent = data.errors.username;
-      passwordeError.textContent = data.errors.password;
-      tosAgreementError.textContent = data.errors.tosAgreement;
-    }
-    if (data.user) {
-      location.assign("/dashbord");
-    }
-  });
-</script>

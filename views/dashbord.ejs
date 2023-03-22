@@ -7,15 +7,3 @@
 
 <%- include('./partials/footer') %>
 
-<script>
-  if (document.cookie.indexOf("jwt_exist") > -1) {
-    const classList = [".login", ".register", ".logout", ".dashbord"];
-    classList.forEach((val) => {
-      if (val === ".login" || val === ".register") {
-        document.querySelector(val).classList.add("hidden");
-      } else {
-        document.querySelector(val).classList.remove("hidden");
-      }
-    });
-  }
-</script>
