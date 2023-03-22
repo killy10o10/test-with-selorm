@@ -36,7 +36,7 @@ const createToken = function (user_id) {
 
 module.exports.signup_get = function (req, res) {
   const data = { title: "Todo App - Sign Up" };
-  res.render("auth/sign-up", {data});
+  res.render("auth/sign-up", { data });
 };
 
 module.exports.signup_post = async function (req, res) {
@@ -67,7 +67,9 @@ module.exports.signup_post = async function (req, res) {
       const token = createToken(newUser.id);
       res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
       res.cookie("jwt_exist", true, { maxAge: maxAge });
-      res.status(201).json({ user: newUser.id });
+      req.session.user = { id: newUser.id, username: newUser.username };
+      console.log(req.session.user);
+      res.status(201).json({ user: newUser.username });
     } catch (err) {
       error = errorHandler(err);
       res.status(403).json({ errors: error[1] });
@@ -76,15 +78,13 @@ module.exports.signup_post = async function (req, res) {
 };
 module.exports.signin_get = async function (req, res) {
   const data = { title: "Todo App - Sign In" };
-  res.render("auth/sign-in", {data});
+  res.render("auth/sign-in", { data });
 };
 
 module.exports.signin_post = async function (req, res) {
   const user = ({ username, password } = req.body);
-  console.log(user.username);
   //validate user data
   var errors = { username: "", password: "" };
-
   if (user.username.trim().length <= 0) {
     errors.username = new Error("username is required");
   }
@@ -95,7 +95,10 @@ module.exports.signin_post = async function (req, res) {
   if (error[0]) {
     res.status(403).json({ errors: error[1] });
   } else {
-    var result = await User.findOne({ where: { username: user.username } });
+    var result = await User.findOne({
+      where: { username: user.username },
+      attributes: ["id", "username", "password"],
+    });
     if (result != null) {
       //compare password
       var isPassword = await bcrypt.compare(user.password, result.password);
@@ -104,8 +107,10 @@ module.exports.signin_post = async function (req, res) {
         var token = createToken(result.id);
         res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
         res.cookie("jwt_exist", true, { maxAge: maxAge });
+        delete result.password;
+        req.session.user = result.toJSON();
         var data = {
-          user: result.id,
+          user: result.username,
         };
         res.status(200).json(data);
       } else {

@@ -6,7 +6,7 @@
 const { Router } = require("express");
 const homeController = require("../controllers/HomeController");
 const userController = require("../controllers/UserController");
-const todoControler = require("../controllers/TodoController");
+const todoController = require("../controllers/TodoController");
 const middleware = require("../middlewares/middleware");
 
 //initialize router
@@ -29,6 +29,7 @@ router.post("/sign-in", userController.signin_post);
 router.get("/logout", userController.logout);
 
 // The dashboard route, which requires authentication middleware
-router.get("/dashboard", middleware.auth, todoController.dashboard);
+router.get("/dashbord", middleware.auth, todoController.dashbord);
+router.post("/dashbord", middleware.auth, todoController.post);
 
 module.exports = router;

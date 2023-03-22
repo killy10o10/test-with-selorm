@@ -6,13 +6,13 @@
 if (document.cookie.indexOf("jwt_exist") > -1) {
   document.addEventListener("DOMContentLoaded", function () {
     const classList = [".login", ".register", ".logout", ".dashbord"];
-    classList.forEach((val)=>{
-        if(val === '.login' || val === '.register'){
-            document.querySelector(val).classList.add('hidden')
-        }else{
-            document.querySelector(val).classList.replace('hidden','show')
-        }
-    })
+    classList.forEach((val) => {
+      if (val === ".login" || val === ".register") {
+        document.querySelector(val).classList.add("hidden");
+      } else {
+        document.querySelector(val).classList.replace("hidden", "show");
+      }
+    });
   });
 }
 

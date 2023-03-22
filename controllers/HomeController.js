@@ -3,6 +3,7 @@
  */
 
 //Dependencies
+const Todo = require;
 
 const description = `
 Welcome to MyApp, a simple CRUD application built with Node.js
@@ -17,5 +18,7 @@ new features and customize it to your needs.
 Try MyApp today and see how easy it is to manage your data!`;
 module.exports.get = function (req, res) {
   const data = { title: "Todo App - Home", description: description };
-  res.render("home", {data});
+  res.render("home", { data });
 };
+
+
