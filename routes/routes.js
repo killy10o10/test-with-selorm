@@ -30,6 +30,7 @@ router.get("/logout", userController.logout);
 
 // The dashboard route, which requires authentication middleware
 router.get("/dashbord", middleware.auth, todoController.dashbord);
-router.post("/dashbord", middleware.auth, todoController.post);
+router.post("/todo", middleware.auth, todoController.post);
+router.get('/todo-list',middleware.auth,todoController.todo_list)
 
 module.exports = router;

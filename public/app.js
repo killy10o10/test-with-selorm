@@ -91,3 +91,56 @@ const signUp = function () {
     }
   });
 };
+
+// todo -POST
+function addTodo() {
+  const todoForm = document.querySelector("form");
+
+  // reset error fields
+  const fields = ["description", "deadline", "priority", "notes"];
+  fields.forEach((field) => {
+    document.querySelector(`.error.${field}`).value = "";
+  });
+
+  //listen to submit event
+  todoForm.addEventListener("submit", async function (e) {
+    // prevent form  submit
+    e.preventDefault();
+
+    //grab form values
+    var todoObject = {};
+    fields.forEach((field) => {
+      todoObject[field] = todoForm[field].value;
+    });
+
+    //submit form
+    var res = await fetch("/todo", {
+      method: "POST",
+      body: JSON.stringify(todoObject),
+      headers: { "Content-Type": "application/json" },
+    });
+    var data = await res.json();
+    if (data.errors) {
+      console.log(data.errors);
+      fields.forEach((field) => {
+        var val = (document.querySelector(`.error.${field}`).textContent =
+          data.errors[field]);
+      });
+    }
+    if (data.duplicate != null) {
+      alert(data.duplicate);
+    }
+    if (data.todo) {
+      //reset form
+      todoForm.reset();
+      //close form
+      document.querySelector(".btn-close").click();
+
+    }
+  });
+}
+
+
+
+
+

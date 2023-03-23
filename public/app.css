@@ -1,0 +1,22 @@
+/* base file all css */
+
+.error {
+    color: red;
+  }
+  * {
+    word-spacing: calc(5px + 0.5px);
+  }
+  a {
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .hidden {
+    display: none;
+  }
+  .show {
+    display: block;
+  }
+
+  .my-todo-list{
+  padding-right: 30px;
+  }
