@@ -34,14 +34,14 @@ db.sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    user_id: {
-      type: DataTypes.UUID,
-      allowNull:false,
-      references: {
-        model: User,
-        key: 'id',
-      }
-    },
+    // user_id: {
+    //   type: DataTypes.UUID,
+    //   allowNull:false,
+    //   references: {
+    //     model: User,
+    //     key: 'id',
+    //   }
+    // },
   },
   {
     tableName: "Todos",

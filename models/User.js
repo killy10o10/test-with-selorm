@@ -5,6 +5,7 @@
 //dependencies
 const db = require("../Database/db");
 const { DataTypes } = require("sequelize");
+const Todo = require("./Todo");
 
 //user model schema defination
 db.sequelize.define(
@@ -13,7 +14,7 @@ db.sequelize.define(
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey:true
+      primaryKey: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -43,7 +44,6 @@ db.sequelize.define(
         },
       },
     },
-
   },
 
   {
@@ -56,9 +56,7 @@ db.sequelize.define(
       },
     ],
   }
-
 );
 
 var User = db.sequelize.models.User;
-
 module.exports = User;

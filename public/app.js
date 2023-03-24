@@ -136,11 +136,43 @@ function addTodo() {
       //close form
       document.querySelector(".btn-close").click();
 
+      //push new  todo to table
     }
   });
 }
 
+//create todoTable
+function createTable() {
+  //get table aread
+  const tableDiv = document.querySelector(".table.todo");
+  //create table components
+  var tableConmponents = ["table", "thead", "tbody", "tr"];
+  var tableObject = {};
+  tableConmponents.forEach((component) => {
+    tableObject[component] = document.createElement(component);
+  });
+  //append table to table div
+  var { table, thead, tbody, tr, th } = tableObject;
+  table.classList.add("table");
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  thead.appendChild(tr);
 
+  //tr columns
+ //tr columns
+var columns = ["Description", "Deadline", "Priority", "Notes"];
+columns.forEach((value, index) => {
+  if(index >= 0){
+    var col = document.createElement("th");
+    col.textContent = value;
+    tr.appendChild(col);
+  }
+});
+  //body colums
 
-
-
+  tableDiv.appendChild(table);
+  console.log(tableDiv.appendChild(table));
+}
+document.addEventListener("DOMContentLoaded", () => {
+  createTable();
+});

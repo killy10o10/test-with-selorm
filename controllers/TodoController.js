@@ -13,7 +13,7 @@ module.exports.dashbord = async function (req, res) {
     res.redirect("/logout");
   }
   data.head = `Welcome  - (${req.session.user.username}) - My Todo List`;
-  data.todo = await Todo.findAll({
+  data.todo = await Todo.findAll({where:{UserId:req.session.user.id},
     attributes: ["description", "deadline", "priority", "notes"],
   });
   res.render("dashbord", { data });
@@ -60,7 +60,7 @@ module.exports.post = async function (req, res) {
     res.status(403).json({ errors: errors });
   } else {
     //proceed  to persist data to db
-    todoObject.user_id = req.session.user.id;
+    todoObject.UserId = req.session.user.id;
     //persist data to db
     try {
       await Todo.create(todoObject);

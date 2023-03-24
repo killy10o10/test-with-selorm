@@ -5,32 +5,6 @@
   </div>
 </div>
 
-<div class="table">
-  <% if (data.todo) { %>
-  <!-- todo list -->
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Deadline</th>
-        <th>Priority</th>
-        <th>notes</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% data.todo.forEach(todo => { %>
-            <tr>
-                <td><%= todo.description %></td>
-                <td><%= todo.deadline %></td>
-                <td><%= todo.priority %></td>
-                <td><%= todo.notes %></td>
-            </tr>
-        <% }) %>
-    </tbody>
-  </table>
-  <% } else { %>
-  <div class="text-center">
-    <span> You do not have any todos yet, click on new todo to add one</span>
-  </div>
-  <% } %>
+<div class="table todo">
+
 </div>
