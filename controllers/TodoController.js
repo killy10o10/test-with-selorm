@@ -5,6 +5,7 @@
 // dependencies
 
 const Todo = require("../models/Todo");
+const User = require("../models/User");
 
 module.exports.dashbord = async function (req, res) {
   var data = {};
@@ -13,7 +14,8 @@ module.exports.dashbord = async function (req, res) {
     res.redirect("/logout");
   }
   data.head = `Welcome  - (${req.session.user.username}) - My Todo List`;
-  data.todo = await Todo.findAll({where:{UserId:req.session.user.id},
+  data.todo = await Todo.findAll({
+    where: { UserId: req.session.user.id },
     attributes: ["description", "deadline", "priority", "notes"],
   });
   res.render("dashbord", { data });
@@ -64,7 +66,12 @@ module.exports.post = async function (req, res) {
     //persist data to db
     try {
       await Todo.create(todoObject);
-      res.status(201).json({ todo: "todo added" });
+      const todo = await Todo.findAll({
+        where: { UserId: req.session.user.id },
+        attributes: ["description", "deadline", "priority", "notes"],
+        order: [["priority", "ASC"]],
+      });
+      res.status(201).json({ todo: todo });
     } catch (err) {
       res.status(500).json({
         duplicate: "You have existing todo with same description",
@@ -75,7 +82,14 @@ module.exports.post = async function (req, res) {
 
 module.exports.todo_list = async function (req, res) {
   var todoList = await Todo.findAll({
+    where: { UserId: req.session.user.id },
     attributes: ["description", "deadline", "priority", "notes"],
+    order: [["priority", "ASC"]],
   });
-  res.status(200).json(todoList);
+
+  if (todoList.length > 0) {
+    res.status(200).json({ list: todoList });
+  } else {
+    res.status(200).json({ noRecord: true });
+  }
 };
