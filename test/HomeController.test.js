@@ -16,7 +16,7 @@ const app = require("../index");
 describe("HomeController", () => {
   let server;
   beforeAll(() => {
-    server = app.listen(3000);
+    server = app.listen(3001);
   });
   afterAll((done) => {
     server.close();
