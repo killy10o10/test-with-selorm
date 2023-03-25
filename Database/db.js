@@ -6,6 +6,8 @@
 require("dotenv").config();
 const { DB_NAME, DB_USERNAME, DB_PASSWORD } = process.env;
 const { Sequelize } = require("sequelize");
+const util  = require('util')
+const debug = util.debuglog('db')
 
 //db container
 const db = {};
@@ -14,23 +16,23 @@ const db = {};
 db.sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: "localhost",
   dialect: "mysql",
+  logging:{}
 });
 
 //test db connection
 db.connect = async () => {
   try {
-    await db.sequelize.authenticate();
-    console.log("db authentication successful");
+   await db.sequelize.authenticate();
   } catch (err) {
-    console.error(err);
+   debug(err);
   }
 };
 
 db.close = async () => {
   try {
-    await db.sequelize.close();
+   await db.sequelize.close();
   } catch (err) {
-    console.error(err);
+     debug(err);
   }
 };
 

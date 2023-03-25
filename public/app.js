@@ -153,9 +153,9 @@ function addTodo() {
       document.querySelector(".btn-close").click();
 
       var table = document.querySelector(".table.todo>.table");
-      console.log(table.childNodes[1]);
-      table.removeChild(table.childNodes[1]);
-      tableBody(todo);
+      await table.removeChild(table.childNodes[1]);
+      await tableBody(todo);
+
     }
   });
 }
@@ -195,13 +195,14 @@ async function createTable() {
 
 const tableBody = async function (data) {
   var tbody = document.createElement("tbody");
-  data.forEach((todo) => {
-    var tr = document.createElement("tr");
-    var child = `<td>${todo.description}</td><td>${todo.deadline}</td><td>${todo.priority}</td><td>${todo.notes}</td`;
-    tr.innerHTML = child;
-
-    var table = document.querySelector(".table");
-    tbody.appendChild(tr);
-    table.appendChild(tbody);
+  data.forEach((todo, index) => {
+    if (index >= 0) {
+      var tr = document.createElement("tr");
+      var child = `<td>${todo.description}</td><td>${todo.deadline}</td><td>${todo.priority}</td><td>${todo.notes}</td`;
+      tr.innerHTML = child;
+      tbody.appendChild(tr);
+    }
   });
+  var table = document.querySelector(".table");
+  table.appendChild(tbody);
 };

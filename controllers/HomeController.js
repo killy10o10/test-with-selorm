@@ -3,7 +3,7 @@
  */
 
 //Dependencies
-const Todo = require;
+
 
 const description = `
 Welcome to MyApp, a simple CRUD application built with Node.js
@@ -16,9 +16,7 @@ prevent unauthorized access.
 The app is designed to be scalable and modular, allowing you to easily add
 new features and customize it to your needs.
 Try MyApp today and see how easy it is to manage your data!`;
-module.exports.get = function (req, res) {
+module.exports.get = async function (req, res) {
   const data = { title: "Todo App - Home", description: description };
-  res.render("home", { data });
+  res.status(200).json({data:data});
 };
-
-

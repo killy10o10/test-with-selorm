@@ -12,6 +12,8 @@ const router = require("./routes/routes");
 const db = require("./Database/db");
 const migration = require("./Database/migration");
 const session = require("express-session");
+const util  = require('util')
+const debug = util.debuglog('db')
 
 //iinitilize express app
 
@@ -23,11 +25,6 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "views"));
 
-// test connection to db
-db.connect();
-//run migrations
-migration.runMigration(true);
-
 //set up middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -38,12 +35,24 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie:{maxAge:1000*60*60*12}
+    cookie: { maxAge: 1000 * 60 * 60 * 12 },
   })
 );
 app.use(router);
 
+
+
+//run migrations
+(async () => {
+  // test connection to db
+  await db.connect();
+  await migration.runMigration(false);
+})();
+
 //start server and listen on specific port
-app.listen(PORT, () => {
-  console.log(`server is up and runing on port ${PORT}`);
-});
+
+// app.listen(PORT, () => {
+//   debug(`server is up and runing on port ${PORT}`);
+// });
+
+module.exports = app;
