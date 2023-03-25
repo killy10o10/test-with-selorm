@@ -12,7 +12,6 @@ const {
   afterAll,
 } = require("@jest/globals");
 const app = require("../index");
-const homeContrller = require("../controllers/HomeController");
 
 describe("HomeController", () => {
   let server;
