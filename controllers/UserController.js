@@ -6,7 +6,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { render } = require("ejs");
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
@@ -36,11 +35,12 @@ const createToken = function (user_id) {
 
 module.exports.signup_get = function (req, res) {
   const data = { title: "Todo App - Sign Up" };
-  res.render("auth/sign-up", { data });
+  res.status(200).json({ data: data });
 };
 
 module.exports.signup_post = async function (req, res) {
-  const user = ({ username, password, tosAgreement } = req.body);
+  const { username = "", password = "", tosAgreement = false } = req.body;
+  const user = { username, password, tosAgreement };
   //validate user data
   var errors = { username: "", password: "", tosAgreement: "" };
 
@@ -48,28 +48,29 @@ module.exports.signup_post = async function (req, res) {
     errors.username = new Error("username is required");
   }
   if (user.password.trim().length <= 6) {
-    errors.password = new Error("password is required");
+    errors.password = new Error(
+      "password should be at least 6 characters long"
+    );
   }
   if (user.tosAgreement == false) {
     errors.tosAgreement = new Error("tosAgreement is required");
   }
   var error = errorHandler(errors);
-  console.log(error);
   if (error[0]) {
     res.status(403).json({ errors: error[1] });
   } else {
     //hash password
-    var salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(user.password, salt);
+    const salt = await bcrypt.genSalt();
+    const hashedPassword =await bcrypt.hash(user.password, salt);
+    user.password =hashedPassword
     try {
-      const newUser = await User.create(user);
+      const { username, id } = await User.create(user);
       //create jwt oken
-      const token = createToken(newUser.id);
+      const token = createToken(id);
       res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
       res.cookie("jwt_exist", true, { maxAge: maxAge });
-      req.session.user = { id: newUser.id, username: newUser.username };
-      console.log(req.session.user);
-      res.status(201).json({ user: newUser.username });
+      req.session.user = { id: id, username: username };
+      res.status(201).json({ user: { username, id } });
     } catch (err) {
       error = errorHandler(err);
       res.status(403).json({ errors: error[1] });

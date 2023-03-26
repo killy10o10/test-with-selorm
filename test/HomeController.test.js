@@ -27,7 +27,7 @@ describe("HomeController", () => {
       const res = await request(app).get("/");
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty(["data"]);
-      expect(res.body.data).toMatchObject({
+      expect(res.body.data).toEqual({
         title: "Todo App - Home",
         description: expect.any(String),
       });

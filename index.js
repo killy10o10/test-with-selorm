@@ -52,7 +52,7 @@ app.use(router);
 //start server and listen on specific port
 
 // app.listen(PORT, () => {
-//   debug(`server is up and runing on port ${PORT}`);
+//   console.log(`server is up and runing on port ${PORT}`);
 // });
 
 module.exports = app;
