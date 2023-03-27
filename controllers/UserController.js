@@ -7,31 +7,10 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const { JWT_SECRET } = process.env;
 
-const errorHandler = function (err) {
-  var errors = { username: null, password: null, tosAgreement: null };
-  if (err.name) {
-    errors.username = "user with the same name exist already";
-    return [true, errors];
-  }
-
-  Object.keys(err).forEach((e) => {
-    errors[e] = err[e].message;
-  });
-  if (errors.username || errors.password || errors.tosAgreement) {
-    return [true, errors];
-  } else {
-    return [false, errors];
-  }
-};
+const util = require("../utils/helpers");
 
 const maxAge = 1000 * 60 * 60 * 12;
-
-const createToken = function (user_id) {
-  var token = jwt.sign({ user_id }, JWT_SECRET, { expiresIn: maxAge });
-  return token;
-};
 
 module.exports.signup_get = function (req, res) {
   const data = { title: "Todo App - Sign Up" };
@@ -55,7 +34,9 @@ module.exports.signup_post = async function (req, res) {
   if (user.tosAgreement == false) {
     errors.tosAgreement = new Error("tosAgreement is required");
   }
-  var error = errorHandler(errors);
+
+  var error = util.errorHandler(errors);
+
   if (error[0]) {
     res.status(403).json({ errors: error[1] });
   } else {
@@ -64,15 +45,16 @@ module.exports.signup_post = async function (req, res) {
     const hashedPassword = await bcrypt.hash(user.password, salt);
     user.password = hashedPassword;
     try {
+
       const { username, id } = await User.create(user);
       //create jwt oken
-      const token = createToken(id);
+      const token = util.createToken(id);
       res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
       res.cookie("jwt_exist", true, { maxAge: maxAge });
       req.session.user = { id: id, username: username };
       res.status(201).json({ user: { username, id } });
     } catch (err) {
-      error = errorHandler(err);
+      error = util.errorHandler(err);
       res.status(403).json({ errors: error[1] });
     }
   }
@@ -93,7 +75,7 @@ module.exports.signin_post = async function (req, res) {
   if (user.password.trim().length <= 6) {
     errors.password = new Error("password is required");
   }
-  var error = errorHandler(errors);
+  var error = util.errorHandler(errors);
   if (error[0]) {
     res.status(403).json({ errors: error[1] });
   } else {
@@ -107,7 +89,7 @@ module.exports.signin_post = async function (req, res) {
 
       if (isPassword) {
         //assign a jwt token  to user
-        var token = createToken(result.id);
+        var token =util.createToken (result.id);
         res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
         res.cookie("jwt_exist", true, { maxAge: maxAge });
         delete result.password;
@@ -119,7 +101,7 @@ module.exports.signin_post = async function (req, res) {
         };
         res.status(200).json({ user: data });
       } else {
-        res.status(401).json({errors:{ password: "invalid password" }});
+        res.status(401).json({ errors: { password: "invalid password" } });
       }
     } else {
       var data = {
@@ -133,5 +115,5 @@ module.exports.signin_post = async function (req, res) {
 module.exports.logout = function (req, res) {
   res.cookie("jwt", "", { maxAge: 0 });
   res.cookie("jwt_exist", true, { maxAge: 0 });
-  res.status(200).json({data:"user logged out"});
+  res.status(200).json({ data: "user logged out" });
 };

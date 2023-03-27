@@ -16,8 +16,9 @@ const {
 const app = require("../index");
 const User = require("../models/User");
 const { logout } = require("../controllers/UserController");
-
+const util = require("../utils/helpers");
 const bcrypt = require("bcrypt");
+
 
 // mock the bcrypt dependency
 jest.mock("bcrypt", () => ({
@@ -68,8 +69,8 @@ describe("UserController", () => {
       //spy on bcrypt
       const genSalt = jest.spyOn(bcrypt, "genSalt");
       const hash = jest.spyOn(bcrypt, "hash");
-      const compare = jest.spyOn(bcrypt, "compare");
-      const res = await request(app).post("/sign-up").send(userMockObject);
+      jest.spyOn(bcrypt, "compare");
+      await request(app).post("/sign-up").send(userMockObject);
       expect(genSalt).toHaveBeenCalled();
       expect(hash).toHaveBeenCalledWith("helloworld", "mockedSalt");
     });
@@ -88,6 +89,7 @@ describe("UserController", () => {
 
     test("should return 201 status code and  a user object with keys  username and id when user data is valid", async () => {
       const res = await request(app).post("/sign-up").send(userMockObject);
+      console.log(res.body)
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty(["user"]);
       expect(res.body.user).toEqual({
@@ -194,5 +196,41 @@ describe("UserController", () => {
         data: "user logged out",
       });
     });
+  });
+
+  describe("errorHandler", () => {
+    test("should return [true,errors] when error has name property", () => {
+      const err = { name: "ValidatorError" };
+      const [hasError, errors] = util.errorHandler(err);
+      expect(hasError).toBe(true);
+      expect(errors).toMatchObject({
+        username: "user with the same name exist already",
+      });
+    });
+
+    test("should return [true,errors] when error has multiple properties", () => {
+      const err = {
+        username: new Error("username is required"),
+        password: new Error("password should be at least 6 characters long"),
+        tosAgreement: new Error("tosAgreement is required"),
+      };
+      const [hasError, errors] = util.errorHandler(err);
+      expect(hasError).toBe(true);
+      expect(errors).toEqual({
+        username: "username is required",
+        password: "password should be at least 6 characters long",
+        tosAgreement: "tosAgreement is required",
+      });
+    });
+
+    test('should return [false]  when there are no errors', ()=>{
+      const err = {
+        username:'',
+        password:'',
+        tosAgreement:''
+      }
+      const [hasError,errors]  =  util.errorHandler(err)
+      expect(hasError).toBe(false)
+    })
   });
 });
