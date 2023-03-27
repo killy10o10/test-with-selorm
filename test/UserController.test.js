@@ -18,7 +18,7 @@ const User = require("../models/User");
 const { logout } = require("../controllers/UserController");
 const util = require("../utils/helpers");
 const bcrypt = require("bcrypt");
-
+const sinon = require("sinon");
 
 // mock the bcrypt dependency
 jest.mock("bcrypt", () => ({
@@ -34,6 +34,7 @@ jest.mock("bcrypt", () => ({
 }));
 
 describe("UserController", () => {
+  ``;
   let server;
   beforeAll(() => {
     server = app.listen(3001);
@@ -45,6 +46,7 @@ describe("UserController", () => {
 
   let userMockObject;
   beforeEach(() => {
+   
     userMockObject = {
       username: "ewave80@gmail.com",
       password: "helloworld",
@@ -89,7 +91,7 @@ describe("UserController", () => {
 
     test("should return 201 status code and  a user object with keys  username and id when user data is valid", async () => {
       const res = await request(app).post("/sign-up").send(userMockObject);
-      console.log(res.body)
+      console.log(res.body);
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty(["user"]);
       expect(res.body.user).toEqual({
@@ -223,14 +225,14 @@ describe("UserController", () => {
       });
     });
 
-    test('should return [false]  when there are no errors', ()=>{
+    test("should return [false]  when there are no errors", () => {
       const err = {
-        username:'',
-        password:'',
-        tosAgreement:''
-      }
-      const [hasError,errors]  =  util.errorHandler(err)
-      expect(hasError).toBe(false)
-    })
+        username: "",
+        password: "",
+        tosAgreement: "",
+      };
+      const [hasError, errors] = util.errorHandler(err);
+      expect(hasError).toBe(false);
+    });
   });
 });
