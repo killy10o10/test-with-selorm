@@ -61,8 +61,8 @@ module.exports.signup_post = async function (req, res) {
   } else {
     //hash password
     const salt = await bcrypt.genSalt();
-    const hashedPassword =await bcrypt.hash(user.password, salt);
-    user.password =hashedPassword
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
     try {
       const { username, id } = await User.create(user);
       //create jwt oken
@@ -79,11 +79,12 @@ module.exports.signup_post = async function (req, res) {
 };
 module.exports.signin_get = async function (req, res) {
   const data = { title: "Todo App - Sign In" };
-  res.render("auth/sign-in", { data });
+  res.status(200).json({ data: data });
 };
 
 module.exports.signin_post = async function (req, res) {
-  const user = ({ username, password } = req.body);
+  const { username = "", password = "" } = req.body;
+  const user = { username, password };
   //validate user data
   var errors = { username: "", password: "" };
   if (user.username.trim().length <= 0) {
@@ -103,6 +104,7 @@ module.exports.signin_post = async function (req, res) {
     if (result != null) {
       //compare password
       var isPassword = await bcrypt.compare(user.password, result.password);
+
       if (isPassword) {
         //assign a jwt token  to user
         var token = createToken(result.id);
@@ -110,21 +112,20 @@ module.exports.signin_post = async function (req, res) {
         res.cookie("jwt_exist", true, { maxAge: maxAge });
         delete result.password;
         req.session.user = result.toJSON();
-        var data = {
-          user: result.username,
+        const data = {
+          id: result.id,
+          username: result.username,
+          password: result.password,
         };
-        res.status(200).json(data);
+        res.status(200).json({ user: data });
       } else {
-        var data = {
-          errors: { password: "invalid password" },
-        };
-        res.status(403).json(data);
+        res.status(401).json({errors:{ password: "invalid password" }});
       }
     } else {
       var data = {
         errors: { username: "username not found" },
       };
-      res.status(403).json(data);
+      res.status(404).json(data);
     }
   }
 };
@@ -132,5 +133,5 @@ module.exports.signin_post = async function (req, res) {
 module.exports.logout = function (req, res) {
   res.cookie("jwt", "", { maxAge: 0 });
   res.cookie("jwt_exist", true, { maxAge: 0 });
-  res.status(200).redirect("/");
+  res.status(200).json({data:"user logged out"});
 };
