@@ -9,9 +9,13 @@ const User = require("../models/User");
 
 module.exports.dashbord = async function (req, res) {
   var data = {};
+
   data.title = "Todo App - Dashbord";
   if (!req.session) {
-    res.redirect("/logout");
+   const  error = {
+      message: "unauthorized, please login",
+    };
+    res.status(302).json({data:error});
   }
   data.head = `Welcome  - (${req.session.user.username}) - My Todo List`;
   data.todo = await Todo.findAll({

@@ -17,13 +17,14 @@ middleware.auth = async function (req, res, next) {
     if (!err && decodedToken) {
       next();
     } else {
+
       var data = {
         errors: {
           unauthorized: "unauthorized, please login",
         },
       };
 
-      res.status(403).redirect('/sign-in')
+      res.status(302).json({data:data})
     }
   });
 };

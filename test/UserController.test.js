@@ -46,7 +46,7 @@ describe("UserController", () => {
 
   let userMockObject;
   beforeEach(() => {
-   
+
     userMockObject = {
       username: "ewave80@gmail.com",
       password: "helloworld",
