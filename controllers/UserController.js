@@ -49,6 +49,7 @@ module.exports.signup_post = async function (req, res) {
       const { username, id } = await User.create(user);
       //create jwt oken
       const token = util.createToken(id);
+      res.set('Access-Control-Expose-Headers', 'Set-Cookie');
       res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
       res.cookie("jwt_exist", true, { maxAge: maxAge });
       req.session.user = { id: id, username: username };
@@ -90,6 +91,7 @@ module.exports.signin_post = async function (req, res) {
       if (isPassword) {
         //assign a jwt token  to user
         var token =util.createToken (result.id);
+        res.set('Access-Control-Expose-Headers', 'Set-Cookie');
         res.cookie("jwt", token, { maxAge: maxAge, httpOnly: true });
         res.cookie("jwt_exist", true, { maxAge: maxAge });
         delete result.password;
@@ -97,7 +99,7 @@ module.exports.signin_post = async function (req, res) {
         const data = {
           id: result.id,
           username: result.username,
-          password: result.password,
+
         };
         res.status(200).json({ user: data });
       } else {

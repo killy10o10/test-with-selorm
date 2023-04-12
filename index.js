@@ -12,8 +12,9 @@ const router = require("./routes/routes");
 const db = require("./Database/db");
 const migration = require("./Database/migration");
 const session = require("express-session");
-const util  = require('util')
+const util = require('util')
 const debug = util.debuglog('db')
+const cors = require('cors')
 
 //iinitilize express app
 
@@ -28,7 +29,12 @@ app.set("views", path.resolve(__dirname, "views"));
 //set up middlewares
 app.use(express.json());
 app.use(cookieParser());
-
+const corsOptions = {
+  origin:true,
+  methods: ['GET', 'DELETE', 'PUT', 'POST'],
+  credentials: true
+}
+app.use(cors())
 //set up session
 app.use(
   session({
@@ -51,8 +57,8 @@ app.use(router);
 
 //start server and listen on specific port
 
-// app.listen(PORT, () => {
-//   console.log(`server is up and runing on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`server is up and runing on port ${PORT}`);
+});
 
 module.exports = app;
