@@ -7,7 +7,7 @@
 
 const description = `
 Welcome to MyApp, a simple CRUD application built with Node.js
-Express, EJS, JWT, and Sequelize wit
+Express, EJS, JWT, and Sequelize with
 MySQL as the database. With MyApp, you can easily Create, Read, Update,
 and Delete data stored in th
 database using a user-friendly web interface

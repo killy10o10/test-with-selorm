@@ -32,4 +32,5 @@ util.createToken = function (user_id) {
   return token;
 };
 
+
 module.exports = util;

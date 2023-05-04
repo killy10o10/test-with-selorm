@@ -101,7 +101,7 @@ module.exports.signin_post = async function (req, res) {
           username: result.username,
 
         };
-        res.status(200).json({ user: data });
+        res.status(200).json({ user: data, token });
       } else {
         res.status(401).json({ errors: { password: "invalid password" } });
       }
